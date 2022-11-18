@@ -1,0 +1,19 @@
+Name/mana/strength/agility/dexterity/starting money/starting experience/type
+Gaerdal_Ironhand    100     700     500     600     1354    7   Warrior
+Sehanine_Monnbow    600     700     800     500     2500    8   Warrior
+Muamman_Duathall    300     900     500     750     2546    6   Warrior
+Flandal_Steelskin   200     750     650     700     2500    7   Warrior
+Undefeated_Yoj      400     800     400     700     2500    7   Warrior
+Eunoia_Cyn          400     700     800     600     2500    6   Warrior
+Rillifane_Rallathil     1300    750     450     500     2500    9  Sorcerer
+Segojan_Earthcaller     900     800     500     650     2500    5  Sorcerer
+Reign_Havoc             800     800     800     800     2500    8  Sorcerer
+Reverie_Ashels          900     800     700     400     2500    7  Sorcerer
+Kalabar                 800     850     400     600     2500    6  Sorcerer
+Skye_Soar               1000    700     400     500     2500    5  Sorcerer
+Parzival             300     750     650     700     2500    7   Paladin
+Sehanine_cool        300     750     700     700     2500    7   Paladin
+Skoraeus_Stonebones  250     650     600     350     2500    4   Paladin
+Garl_Glittergold     100     600     500     400     2500    5   Paladin
+Amaryllis_Astra      500     500     500     500     2500    5   Paladin
+Caliber_Heist        400     400     400     400     2500    8   Paladin

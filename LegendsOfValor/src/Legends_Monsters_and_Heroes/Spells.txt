@@ -1,0 +1,14 @@
+Name/cost/required level/damage/mana cost/type 
+Flame_Tornado   700     4   850     300    FireSpell
+Breath_of_Fire  350     1   450     100    FireSpell
+Heat_Wave       450     2   600     150    FireSpell
+Lava_Comet      800     7   1000    550    FireSpell
+Hell_Storm      600     3   950     600    FireSpell
+Snow_Cannon     500     2   650     250    IceSpell
+Ice_Blade       250     1   450     100    IceSpell
+Frost_Blizzard  750     5   850     350    IceSpell
+Arctic_Storm    700     6   800     300    IceSpell
+Lightning_Dagger      400        1       500     150   LightingSpell
+Thunder_Blast         750        4       950     400   LightingSpell
+Electric_Arrows       550        5       650     200   LightingSpell
+Spark_Needles         500        2       600     200   LightingSpell
