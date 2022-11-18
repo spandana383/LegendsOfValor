@@ -11,10 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/LegendsOfValor.iml" filepath="$PROJECT_DIR$/LegendsOfValor.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager">
+  <component name="ProjectRootManager" version="2" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
-  </component>
-  <component name="VcsDirectoryMappings">
-    <mapping directory="$PROJECT_DIR$" vcs="Git" />
   </component>
 </project>
