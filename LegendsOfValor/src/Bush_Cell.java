@@ -3,7 +3,8 @@ import java.util.Arrays;
 
 
 public class Bush_Cell implements Cell{
-    Boolean hero_present;
+    Boolean hero_present; //String none => hero 1 or 2 or 3
+    // party <0,1> , <2,4>, <2,1>
     Boolean monster_present;
 
     public Bush_Cell(){
