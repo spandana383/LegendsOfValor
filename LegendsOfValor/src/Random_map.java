@@ -16,11 +16,9 @@ public class Random_map implements Map{
         this.world_size_y = Components.world_size_y ;
         world = new Cell[world_size_y][world_size_x];
     }
-    party (3 heroes)
-        hero h = party.gethero(1);
-        map.moveUp(h);
+
     @Override
-    public boolean move_up(Hero hero) {
+    public boolean move_up() {
         return false;
     }
 
