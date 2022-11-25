@@ -68,6 +68,30 @@ public class TerminalPrinter {
         }
         System.out.print(Warriors_out+"\n"+Sorcerers_out+"\n"+Paladins_out+"\n");
     }
+
+    static void Print_hero_team(List<Hero> Hero_list){ // print heroes list, for player to select heroes
+        System.out.println("Here is your team of recruited Heroes");
+        String title = String.format("   %-25s %-15s %-10s %-10s %-10s %-10s %-10s %-10s %-10s\n",
+                "Name", "HP", "level","mana","str","agi","dex","money","exp");
+        String Warriors_out = "Here are warriors:\n" + title;
+        String Sorcerers_out = "Here are sorcerers:\n"+ title;
+        String Paladins_out = "Here are paladins:\n"+ title;
+        for(int i = 0; i < Hero_list.size(); i++){
+            Hero h = Hero_list.get(i);
+            if(h instanceof Warrior){
+                Warriors_out += String.format("[%2s] " + h ,i);
+            }
+            else if (h instanceof Sorcerer) {
+                Sorcerers_out += String.format("[%2s] " + h ,i);
+            }
+            else if (h instanceof Paladin) {
+                Paladins_out += String.format("[%2s] " + h,i);
+            }
+        }
+        System.out.print(Warriors_out+"\n"+Sorcerers_out+"\n"+Paladins_out+"\n");
+
+        System.out.println("Are you ready to being the Battle?!?!?!");
+    }
     static void Print_item_cannot_buy(Items items){
         System.out.println("\n*****The hero can't buy "+items.getname()+" because of insufficient money or level*****\n");
     }
@@ -81,7 +105,7 @@ public class TerminalPrinter {
     }
     static void welcome_game(){
         System.out.println("*************************************************");
-        System.out.println("**       Welcome to the Heroes & Monsters      **");
+        System.out.println("**       Welcome to Legends of Valor      **");
         System.out.println("*************************************************");
         System.out.println("The monsters and heroes live in a fictional world. They do not get along and therefore fight each other.\n" +
                 "Every time the heroes win, they gain experience and money. Heroes use the money to buy a variety of\n" +
@@ -167,5 +191,16 @@ public class TerminalPrinter {
     static void Print_buy(Hero hero, Items item){
         System.out.println(" **Cha-Ching** **Cha-Ching**");
         System.out.println(String.format("%s successfully spent %s dollar on %s", hero.getName(), item.getprice(),item.getname()));
+    }
+
+    public static void each_hero_round_begin(Hero h, Map game_map, Player player) {
+        //game_map.print_random_map(player);
+        System.out.println("HERO " + h.getName()+ " MAKE YOUR MOVE");
+
+
+    }
+
+    public static void Invalid_move() {
+        System.out.println("Invalid Move, Try again");
     }
 }

@@ -1,7 +1,28 @@
+import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class TerminalAsk {
     private static Scanin s =  new Scanin();
+    private static Scanner sc =  new Scanner(System.in);
+
+    static Hero ask_which_hero(List<Hero> list){ // ask Hero we need to add in the party
+
+        while(true){
+            System.out.print("Which hero you want to select? Enter the number: ");
+            String num = s.ScanString();
+            try {
+                Integer.parseInt(num);
+            }catch(Exception e) {
+                System.out.println("invalid input! please input a integer\n");
+                continue;
+            }
+            int index = Integer.parseInt(num);
+            if(index < list.size() && index > 0){
+                return list.get(index);
+            }
+        }
+    }
 
     static String ask_buy_sell(Hero hero){
         while(true){
@@ -99,4 +120,131 @@ public class TerminalAsk {
             else System.out.println("Please enter a valid input!");
         }
     }
+
+    public static String ask_which_turn(Party heroParty) {
+        while(true){
+            System.out.println("Play your turn ?");
+            System.out.print("[W] up [A] left [S] down [D] right,\n[K] Attack [N] Potion [L] Spell [E] Equip\n" +
+                    "[T] Teleport [R] Recall\n or type: [I]info [Q] quit\nPlease enter:");
+            String move = s.ScanString();
+            if(move.equals("W") || move.equals("A") || move.equals("S") || move.equals("D") || move.equals("Q") ||
+                    move.equals("K") || move.equals("N") || move.equals("L") || move.equals("E") || move.equals("T") || move.equals("R")){
+                return move;
+            }
+            else if(move.equals("I")) System.out.print(heroParty); // if the input is I print information
+            else System.out.println("Please enter a valid move for this turn !");
+        }
+    }
+
+    public static Boolean teleport_hero(Map game_map, Hero hero, Player player){
+        while(true){
+            int teleport_x;
+            int teleport_y;
+            int cur_y_pos;
+            int max_x_pos = 0;
+            int teleport_col;
+            Boolean same_column = false;
+
+            String type;
+            System.out.println("Where Do you wanna teleport to ?");
+            try{
+                teleport_x  = sc.nextInt() - 1;
+                teleport_y  = sc.nextInt() - 1;
+                cur_y_pos = hero.getChar_pos_y();
+
+
+                type = game_map.getWorldCell(teleport_y , teleport_x).toString();
+                Cell cur_cell = game_map.getWorldCell(hero.getChar_pos_x(),hero.getChar_pos_y());
+                Cell cell_to_teleport = game_map.getWorldCell(teleport_x , teleport_y);
+                Cell monster_check_cell = game_map.getWorldCell(teleport_x - 1 , teleport_y);
+
+                //To check if the hero is teleporting to the same column
+                if(Arrays.asList(Components.hero_col_1).contains(cur_y_pos)){
+                    if(Arrays.asList(Components.hero_col_1).contains(teleport_y)){
+                        same_column = true;
+                    }
+                }
+                else if(Arrays.asList(Components.hero_col_2).contains(cur_y_pos)){
+                    if(Arrays.asList(Components.hero_col_2).contains(teleport_y)){
+                        same_column = true;
+                    }
+                }
+                else if(Arrays.asList(Components.hero_col_3).contains(cur_y_pos)){
+                    if(Arrays.asList(Components.hero_col_3).contains(teleport_y)){
+                        same_column = true;
+                    }
+                }
+
+                //To check if the hero is trying to teleport forward the existing hero
+                if(Arrays.asList(Components.hero_col_1).contains(teleport_y)){
+                    max_x_pos = return_hero_row(player , 1);
+                }
+                else if(Arrays.asList(Components.hero_col_2).contains(teleport_y)){
+                    max_x_pos = return_hero_row(player , 2);
+                }
+                else if(Arrays.asList(Components.hero_col_3).contains(teleport_y)){
+                    max_x_pos = return_hero_row(player , 3);
+                }
+                
+
+
+                if(type.equals(Components.Inaccessible) || cell_to_teleport.getHero_present() || same_column|| teleport_x < max_x_pos||monster_check_cell.getMonster_present()  ){
+                    TerminalPrinter.cannot_move();
+                }
+                else{
+                    cur_cell.setHero_present(false) ;
+                    cell_to_teleport.setHero_present(true);
+                    hero.setChar_pos_x(teleport_x);
+                    hero.setChar_pos_y(teleport_y);
+                    return true;
+                }
+
+            }
+            catch(Exception e){
+                TerminalPrinter.cannot_move();
+
+            }
+
+
+        }
+
+    }
+
+    private static int return_hero_row(Player player, int col) {
+        int x = 0;
+        Hero hero;
+        if(col == 1){
+            for(int i =0 ; i < player.getHeroParty().size() ; i++ ){
+                hero = (Hero) player.getHeroParty().getCharacter(i);
+                if(Arrays.asList(Components.hero_col_1).contains(hero.getChar_pos_y())){
+                    return hero.getChar_pos_x();
+                }
+
+            }
+
+        }
+        else if(col == 2){
+            for(int i =0 ; i < player.getHeroParty().size() ; i++ ){
+                hero = (Hero) player.getHeroParty().getCharacter(i);
+                if(Arrays.asList(Components.hero_col_2).contains(hero.getChar_pos_y())){
+                    return hero.getChar_pos_x();
+                }
+
+            }
+
+        }
+        else if(col == 3){
+            for(int i =0 ; i < player.getHeroParty().size() ; i++ ){
+                hero = (Hero) player.getHeroParty().getCharacter(i);
+                if(Arrays.asList(Components.hero_col_3).contains(hero.getChar_pos_y())){
+                    return hero.getChar_pos_x();
+                }
+
+            }
+
+        }
+        return x;
+    }
+
+
 }

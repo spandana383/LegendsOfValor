@@ -10,6 +10,8 @@ public class Random_map implements Map{
     private int player_space_x;// set where the player is in x-axis
     private int party_space_y;
 
+    Cell cell_1,cell_2;
+
     public Random_map() {
 
         this.world_size_x = Components.world_size_x;
@@ -18,28 +20,147 @@ public class Random_map implements Map{
     }
 
     @Override
-    public boolean move_up() {
-        return false;
+    public boolean move_up(Hero hero) {
+
+
+        try{
+            cell_1 = getWorldCell(hero.getChar_pos_x(), hero.getChar_pos_y());
+            cell_2 = getWorldCell(hero.getChar_pos_x() - 1, hero.getChar_pos_y() );
+
+        }
+        catch(Exception e){
+            TerminalPrinter.Invalid_move();
+            return false;
+
+        }
+
+        if(cell_1.getMonster_present() || cell_2.getHero_present() || hero.getChar_pos_x() <= 0 ){
+            System.out.println(cell_1.getMonster_present());
+            System.out.println(cell_2.getHero_present());
+            System.out.println(hero.getChar_pos_x() <= 0);
+            TerminalPrinter.cannot_move();
+            return false;
+        }
+        cell_1.setHero_present(Components.hero_not_present);
+        cell_2.setHero_present(Components.hero_present);
+        hero.setChar_pos_x(hero.getChar_pos_x() - 1);
+        return true;
+    }
+
+    public Cell getWorldCell(int char_pos_x, int char_pos_y) {
+        return world[char_pos_x][char_pos_y];
     }
 
     @Override
-    public boolean move_down() {
-        return false;
+    public void move_monster_forward(Monster m) {
+        getWorldCell(m.monster_pos_x, m.monster_pos_y).setMonster_present(false);
+        m.setChar_pos_x(m.monster_pos_x + 1);
+        getWorldCell(m.monster_pos_x + 1, m.monster_pos_y).setMonster_present(false);
+
+
     }
 
     @Override
-    public boolean move_left() {
-        return false;
+    public boolean move_down(Hero hero) {
+        String symbol;
+        try{
+            cell_1 = getWorldCell(hero.getChar_pos_x(), hero.getChar_pos_y());
+            cell_2 = getWorldCell(hero.getChar_pos_x() + 1, hero.getChar_pos_y() );
+            //symbol = getWorldCell( hero.getChar_pos_y(), hero.getChar_pos_x() + 1).toString();
+
+        }
+        catch(Exception e){
+            TerminalPrinter.Invalid_move();
+            return false;
+
+        }
+
+        if(cell_1.getMonster_present() || cell_2.getHero_present() || hero.getChar_pos_x() >= (Components.world_size_x-1) ){
+            TerminalPrinter.cannot_move();
+            return false;
+        }
+        cell_1.setHero_present(Components.hero_not_present);
+        cell_2.setHero_present(Components.hero_present);
+        hero.setChar_pos_x(hero.getChar_pos_x() + 1);
+        return true;
     }
 
     @Override
-    public boolean move_right() {
-        return false;
+    public boolean move_left(Hero hero) {
+        String symbol;
+        try {
+            cell_1 = getWorldCell(hero.getChar_pos_x(), hero.getChar_pos_y());
+            cell_2 = getWorldCell(hero.getChar_pos_x(), hero.getChar_pos_y() - 1);
+            symbol = getWorldCell(hero.getChar_pos_y() - 1, hero.getChar_pos_x()).toString();
+
+        } catch (Exception e) {
+            TerminalPrinter.Invalid_move();
+            return false;
+
+        }
+
+        if (cell_1.getMonster_present() || cell_2.getHero_present() || symbol.equals(Components.Inaccessible)) {
+            TerminalPrinter.cannot_move();
+            return false;
+        }
+        cell_1.setHero_present(Components.hero_not_present);
+        cell_2.setHero_present(Components.hero_present);
+        hero.setChar_pos_y(hero.getChar_pos_y() - 1);
+        return true;
+    }
+
+    @Override
+    public boolean move_right(Hero hero) {
+        String symbol;
+        try {
+            cell_1 = getWorldCell(hero.getChar_pos_x(), hero.getChar_pos_y());
+            cell_2 = getWorldCell(hero.getChar_pos_x(), hero.getChar_pos_y() + 1);
+            symbol = getWorldCell(hero.getChar_pos_y() + 1, hero.getChar_pos_x()).toString();
+
+
+        } catch (Exception e) {
+            TerminalPrinter.Invalid_move();
+            return false;
+
+        }
+
+        if (cell_1.getMonster_present() || cell_2.getHero_present() || symbol.equals(Components.Inaccessible)) {
+            TerminalPrinter.cannot_move();
+            return false;
+        }
+        cell_1.setHero_present(Components.hero_not_present);
+        cell_2.setHero_present(Components.hero_present);
+        hero.setChar_pos_y(hero.getChar_pos_y() + 1);
+
+        return true;
     }
 
     @Override
     public Cell getCell() {
         return world[party_space_y][player_space_x];
+    }
+
+    public Cell[][] getWorld(){
+        return world;
+    }
+
+    @Override
+    public void heroRecall(Hero hero, int i) {
+        try{
+            cell_1 = getWorldCell(hero.getChar_pos_x(), hero.getChar_pos_y());
+            cell_2 = getWorldCell(Components.intial_hero_x[i] , Components.intial_hero_y[i]);
+
+        }
+        catch(Exception e){
+            TerminalPrinter.Invalid_move();
+
+        }
+
+        cell_1.setHero_present(false);
+        cell_2.setHero_present(true);
+        hero.setChar_pos_x(Components.intial_hero_x[i]);
+        hero.setChar_pos_y(Components.intial_hero_y[i]);
+
     }
 
     @Override
@@ -65,16 +186,22 @@ public class Random_map implements Map{
         for (int x = 0; x < world_size_x; x++){ // set first n space on x-axis is common
             for(int y = 0; y < world_size_y; y++){ // set first n space on y-axis is common
 
-                if((x == 0 || x == (world_size_x - 1)) && (y % 3) != 2){
-                    world[y][x] = new Nexus_Cell();
+                if((y == 0 || y == (world_size_x - 1)) && (x % 3) != 2){
+                    world[x][y] = new Nexus_Cell();
+                    world[x][y].setPos_x(x);
+                    world[x][y].setPos_y(y);
                 }
-                else if( (y % 3) == 2 ){
-                    world[y][x] = new Inaccesible_Cell();
-                }
-                else{
-                    removed_index = Random_Generator.RandomIndex(cell_pool.size());
-                    world[y][x] = cell_pool.get(removed_index);
-                    cell_pool.remove(removed_index);
+                else {
+                    if( (x % 3) == 2 ){
+                        world[x][y] = new Inaccesible_Cell();
+                    }
+                    else{
+                        removed_index = Random_Generator.RandomIndex(cell_pool.size());
+                        world[x][y] = cell_pool.get(removed_index);
+                        cell_pool.remove(removed_index);
+                    }
+                    world[x][y].setPos_x(x);
+                    world[x][y].setPos_y(y);
                 }
             }
         }
@@ -92,7 +219,7 @@ public class Random_map implements Map{
         }
 
     }
-    public void print_random_map_2(){
+    public void print_random_map(Player player){
         String symbol;
         StringBuilder map = new StringBuilder();
         for (int x = 0; x < 32 ; x++){
@@ -123,9 +250,55 @@ public class Random_map implements Map{
                         //ADD THE HORIZONTAL
                         map.append("|");
                     }
-                    else{
+                    else if((y % 10) == 3 || (y % 10) == 4 || (y % 10) == 5 || (y % 10) == 9){
                         //This is where you check if the hero or monster is present in the cell or not and then print the
                         map.append(" ");
+
+                    }
+                    else if((y % 10) == 1 ){
+
+                        if(world[x/4][y/10].getHero_present()){
+                            map.append(Components.hero_symbol);
+
+                        }
+
+                        else{
+                            map.append(" ");
+                        }
+
+                    }
+
+                    else if( (y % 10) == 2){
+                        if(world[x/4][y/10].getHero_present()){
+                            map.append(get_hero_index(x/4,y/10,player));
+
+                        }
+
+                        else{
+                            map.append(" ");
+                        }
+
+                    }
+                    else if((y % 10) == 6 ){
+                        if(world[x/4][y/10].getMonster_present()){
+                            map.append(Components.monster_symbol);
+
+                        }
+
+                        else{
+                            map.append(" ");
+                        }
+
+                    }
+                    else if( (y % 10) == 7){
+                        if(world[x/4][y/10].getMonster_present()){
+                            map.append(get_monster_index(x/4,y/10,player));
+
+                        }
+
+                        else{
+                            map.append(" ");
+                        }
 
                     }
                 }
@@ -133,23 +306,57 @@ public class Random_map implements Map{
             }
             else if((x % 4) == 3){
                 for(int y =0; y < 80; y++){
-                    //JUST ADD A BLANK SPACE IF IT'S NOT TOO MUCH TROUBLE
+                    //JUST ADD A BLANK SPACE
                     map.append(" ");
                 }
 
             }
             map.append("\n");
 
-            //ADD A NEW LINE CHARACTER!!!!!!
+            //ADD A NEW LINE CHARACTER!
 
         }
         System.out.println(map);
 
     }
 
+    private String get_monster_index(int x, int y, Player player) {
+        int i;
+        for (i = 0; i < player.getMonster_party().size(); i++) {
+
+            if (player.getMonster_party().getMembers(i).getChar_pos_x() == x && player.getMonster_party().getMembers(i).getChar_pos_y() == y) {
+
+                break;
+            }
+        }
+        return String.valueOf(i + 1);
+    }
+
+    private String get_hero_index(int x, int y, Player player) {
+        int i;
+        for (i = 0; i < player.getHeroParty().size(); i++) {
+            if (player.getHeroParty().getMembers(i).getChar_pos_x() == x && player.getHeroParty().getMembers(i).getChar_pos_y() == y) {
+                break;
+            }
+        }
+        return String.valueOf(i + 1);
+    }
 
     @Override
-    public boolean move(String direction) {
+    public void setInitial_HeroPos() {
+        for(int i =0; i < Components.max_heroes ; i++){
+
+        }
+    }
+
+
+    @Override
+    public boolean move(String direction, Hero hero) {
+        if(direction.equals("W")) return move_up(hero);
+        else if (direction.equals("A")) return move_left(hero);
+        else if (direction.equals("S")) return move_down(hero);
+        else if (direction.equals("D")) return move_right(hero);
         return false;
     }
+
 }

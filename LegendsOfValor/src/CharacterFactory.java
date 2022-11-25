@@ -5,7 +5,7 @@ import java.util.List;
 public class CharacterFactory {
     private static FileReader file;
     private static List<Hero> Hero_list = new ArrayList<Hero>();
-    private static List<Monster> Monster_list = new ArrayList<Monster>();
+    static List<Monster> Monster_list = new ArrayList<Monster>();
     CharacterFactory() throws FileNotFoundException {
         file = new FileReader();
         createHero_list();
@@ -75,23 +75,21 @@ public class CharacterFactory {
     static List<Monster> getMosterList(){
         return Monster_list;
     }
-    /*
-    static Party getMonsterParty(int level, int num_heroes){
-        if(level > 10) level = 10; // max level of monster is 10
+
+    static Party getMonsterParty( int num_monsters){
+        // max level of monster is 10
         List<Monster> monsterList_lev = new ArrayList<Monster>(); // list of monsters that have same level of Heroes
         for (Monster m : Monster_list){
-            if(m.getLevel() == level){
-                monsterList_lev.add(m); // add all the same level monster to the list
-            }
+            monsterList_lev.add(m); // add all the same level monster to the list
         }
         Party monster_party = new Party(); // monster party
-        for(int i = 0; i < num_heroes; i++){
+        for(int i = 0; i < num_monsters; i++){
             Monster m = monsterList_lev.remove(Random_Generator.RandomIndex(monsterList_lev.size())); //
             monster_party.addMember(m);
         }
         return monster_party;
     }
-*/
+
 
 /*
     public static void main(String[] args) throws FileNotFoundException { //for test

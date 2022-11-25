@@ -14,20 +14,20 @@ public class Market implements Event{
         TerminalPrinter.Print_items(item_list);
     }
 
-    public void enterMarket(Hero h){ // Hero enter to the market
+    public void enterMarket(Player player ,Hero h){ // Hero enter to the market
         hero = h;
         System.out.println(hero.getName()+" goes in to Market!");
-        while (!Player.checkQuit()){
+        while (!player.checkQuit()){
             String buy_cell = TerminalAsk.ask_buy_sell(hero);  // ask the hero want to buy, sell, or leave
             if(buy_cell.equals("B")){ // if the player choose to buy
-                buyItem();
+                buyItem(player,h);
             }else if(buy_cell.equals("L")){
                 return;
             }else if(buy_cell.equals("Q")){//quit game
-                Player.Quit();
+                player.Quit();
                 return;
             }else if(buy_cell.equals("S")){ // if the player choose to sell
-                sellItem();
+                sellItem(player,h);
             }
         }
     }
@@ -36,14 +36,14 @@ public class Market implements Event{
         return hero;
     }
 
-    public void sellItem(){
+    public void sellItem(Player player ,Hero h){
         List<Items> item_list = new ArrayList<Items>();
         item_list.addAll(hero.getConsumables_inventory());
         item_list.addAll(hero.getEquipment_inventory());
 
         String item_index = TerminalAsk.ask_item_to_sell(hero, item_list); // return the index that need to be sold
         if(item_index.equals("Q")){
-            Player.Quit();
+            player.Quit();
         } else if(item_index.equals("L")){
         } else{
             Items item = item_list.get(Integer.parseInt(item_index));// get the item that need to be sold
@@ -52,14 +52,14 @@ public class Market implements Event{
         }
     }
 
-    public void buyItem(){
-        while(!Player.checkQuit()){ // if quit is not true
+    public void buyItem(Player player,Hero h){
+        while(!player.checkQuit()){ // if quit is not true
             String item_index_string = TerminalAsk.ask_want_to_buy(item_list, hero);
             if(item_index_string.equals("L")){ // hero leave the market
                 return;
             }
             else if(item_index_string.equals("Q")){ // quit
-                Player.Quit(); // quit the game
+                player.Quit(); // quit the game
                 return;
             }
             int item_index = Integer.parseInt(item_index_string); // item_index
@@ -71,7 +71,7 @@ public class Market implements Event{
                 return;
             }
             else if (keep.equals("Q")){ // quit
-                Player.Quit();
+                player.Quit();
                 return;
             }
         }
@@ -89,13 +89,14 @@ public class Market implements Event{
     //for test
     public static void main(String[] args) throws FileNotFoundException {
         Market m = new Market();
-        new Player();
+        Player p = new Player();
         new ItemFactory();
         new CharacterFactory();
         Hero h = (Hero) CharacterFactory.getHeroList().get(0);
         System.out.print(h);
 
-        m.enterMarket(h);
+
+        m.enterMarket(p, h);
         System.out.print(h);
     }
 }

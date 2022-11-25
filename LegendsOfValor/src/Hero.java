@@ -17,6 +17,11 @@ abstract public class Hero implements Character{  // this class is Hero object
     private Weapon weapon; // equipment is weapon that is on hero's hand
     private Armor Arm = null; // Armory on hero
     private boolean move; // if the hero has moved in a battle, this will be true;
+
+    private int hero_pos_x;
+    private int hero_pos_y;
+
+
     private final int level_up_factor; // this is used to set how much experience a hero can level up
     // if the hero's level is 2, he need 10*2 = 20 exp to level up;
     private final double skill_increase_factor; // 5%
@@ -57,6 +62,21 @@ abstract public class Hero implements Character{  // this class is Hero object
             return false;
         }
         return true;
+    }
+
+    public void setChar_pos_x(int hero_pos_x) {
+        this.hero_pos_x = hero_pos_x;
+    }
+
+    public void setChar_pos_y(int hero_pos_y) {
+        this.hero_pos_y = hero_pos_y;
+    }
+
+    public int getChar_pos_x() {
+        return hero_pos_x;
+    }
+    public int getChar_pos_y(){
+        return hero_pos_y;
     }
 
     public void buy(Items item){ //buy item
