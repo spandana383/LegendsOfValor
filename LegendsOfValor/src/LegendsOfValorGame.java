@@ -22,8 +22,10 @@ public class LegendsOfValorGame implements Game {
     }
     @Override
     public void startARound() {
+
         int round_counter = 0;
         while(!player.checkQuit()) {
+            boolean winner = false;
             round_counter++;
             Boolean validMove;
             for (int i = 0; i < player.getHeroParty().size(); i++) {
@@ -37,6 +39,10 @@ public class LegendsOfValorGame implements Game {
                         String turn = TerminalAsk.ask_which_turn(player);
                         if(turn.equals("Q")){ player.Quit(); return;} // quit // if the input is Q, quit the game
                         if (Arrays.asList(Components.direction).contains(turn)) { // move position on map, true if we successfully move
+                            if(checkMonsterNexus()){
+                                winner = true;
+                                break;
+                            }
                             if (game_map.move(turn, (Hero) player.getHeroParty().getMembers(i))) {
                                 validMove = true;
                             }
@@ -137,6 +143,11 @@ public class LegendsOfValorGame implements Game {
                 game_map.print_random_map(player);
 
             }
+            if(winner){
+                TerminalPrinter.heroesWin();
+                break;
+            }
+            winner = false;
 
             //Now it's the monster turn
             for (int i = 0; i < player.getMonster_party().size(); i++) {
@@ -163,11 +174,45 @@ public class LegendsOfValorGame implements Game {
             } else if(player.getMonster_party().empty()){ //if there is no monster
                 addNewMonster(monster_level);
             }
+
+            if(checkMonsterNexus()){
+                //Monsters win
+                        TerminalPrinter.heroesWin();
+                        break;
+            }
+            else if(player.getHeroParty().empty() || checkHeroNexus()){
+                TerminalPrinter.MonstersWin();
+                break;
+
+                //Heroes Win
+            }
+
             game_map.print_random_map(player);
 
             endARound();//end this round
         }
 
+    }
+
+    public boolean checkMonsterNexus() {
+        boolean heroInMonstersNexus = false;
+        for(int i = 0; i < player.getHeroParty().size();i++){
+            Hero hero = player.getHero(i);
+            if((hero.getChar_pos_x() == 0 && hero.getChar_pos_y()==0) || (hero.getChar_pos_x() == 3 && hero.getChar_pos_y()==0) || (hero.getChar_pos_x() == 6 && hero.getChar_pos_y()==0 ) || (hero.getChar_pos_x() == 1 && hero.getChar_pos_y()==0 )|| (hero.getChar_pos_x() == 4 && hero.getChar_pos_y()==0 )|| (hero.getChar_pos_x() == 7 && hero.getChar_pos_y()==0 )){
+                heroInMonstersNexus = true;
+                return heroInMonstersNexus;
+            }
+        }
+        return heroInMonstersNexus;
+    }
+
+    private boolean checkHeroNexus() {
+        boolean monsterInHeroNexsus = false;
+        if( game_map.getWorldCell(0,7).getMonster_present() || game_map.getWorldCell(3,7).getMonster_present() || game_map.getWorldCell(6,7).getMonster_present() || game_map.getWorldCell(1,7).getMonster_present()|| game_map.getWorldCell(4,7).getMonster_present()|| game_map.getWorldCell(7,7).getMonster_present()){
+            monsterInHeroNexsus = true;
+            return monsterInHeroNexsus;
+        }
+        return monsterInHeroNexsus;
     }
 
     private boolean recall(Hero hero , int i) {

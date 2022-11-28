@@ -86,7 +86,7 @@ public class CharacterFactory {
         }
         Party monster_party = new Party(); // monster party
         for(int i = 0; i < num_heroes; i++){
-            Monster m = monsterList_lev.get(Random_Generator.RandomIndex(monsterList_lev.size())); //
+            Monster m = monsterList_lev.remove(Random_Generator.RandomIndex(monsterList_lev.size())); //
             monster_party.addMember(m);
         }
         return monster_party;

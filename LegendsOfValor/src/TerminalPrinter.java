@@ -108,16 +108,23 @@ public class TerminalPrinter {
         System.out.println("**       Welcome to Legends of Valor      **");
         System.out.println("*************************************************");
         System.out.println("The monsters and heroes live in a fictional world. They do not get along and therefore fight each other.\n" +
-                "Every time the heroes win, they gain experience and money. Heroes use the money to buy a variety of\n" +
+                "Every time the heroes kill the monsters, they gain experience and money. Heroes use the money to buy a variety of\n" +
                 "items to aid them in their battles with the monsters. When they accumulate enough experience they\n" +
-                "level up, which improves their skills. The goal of the game is for the heroes to defeat monsters and level\n" +
-                "up indefinitely.");
+                "level up, which improves their skills. The goal of each team is to have one of their members reach the Nexus of the other team." +
+                "The Nexus space that a hero spawns in is\n" +
+                "specific to that hero, and that relationship is maintained for the whole game");
 
-        System.out.println("You are going to form a party and try to kill some monster! ");
-        System.out.println("In this world, you can buy some Weapons, Armors, Spells, Potions in the Market. Once you kill a monster,\n" +
+        System.out.println("You are going to form a party and try to kill some monster on the way to occupy their nexus \n" +
+                "There are three types of cells for the heroes.\n" +
+                "Bush spaces increase the dexterity of any hero inside them.\n" +
+                "Cave spaces increase the agility of any hero inside them\n" +
+                "Koulou spaces increase the strength of any hero who is inside them");
+        System.out.println("In this world, you can buy some Weapons, Armors, Spells, Potions in the Market. If you kill a monster,\n" +
                 "the Heroes in your party will gain some gold and exp. exp will helps your heroes level up! ");
-        System.out.println("* you can equip Weapon/Armor in any battle and it would not cost a turn ");
-        System.out.println("* However, using Spells or Potions will cost a turn ");
+        System.out.println("* you can equip Weapon/Armor and it won't cost you a turn");
+        System.out.println("* However, using Spells or Potions will cost a turn" +
+                "A teleport action allows you to move to a space adjacent to a target hero in a different lane. The recall action allows a hero to return to their specific Nexus. This will always return\n" +
+                "the hero to the Nexus space they spawned at");
     }
 
 
@@ -211,4 +218,15 @@ public class TerminalPrinter {
     public static void print_recall() { System.out.println("successfully recall !!");}
 
     public static void cant_enter_market() { System.out.println("You can only enter market when the hero is in Nexus");}
+
+    public static void heroesWin() {
+        System.out.println("Heroes have won this Round!!!");
+        System.out.println("GAME OVER");
+
+    }
+
+    public static void MonstersWin() {
+        System.out.println("Monsters have won this Round!!!");
+        System.out.println("GAME OVER");
+    }
 }
