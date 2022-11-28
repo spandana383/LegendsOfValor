@@ -71,7 +71,7 @@ public class TerminalPrinter {
 
     static void Print_hero_team(List<Hero> Hero_list){ // print heroes list, for player to select heroes
         System.out.println("Here is your team of recruited Heroes");
-        String title = String.format("   %-25s %-15s %-10s %-10s %-10s %-10s %-10s %-10s %-10s\n",
+        String title = String.format("    %-25s %-15s %-10s %-10s %-10s %-10s %-10s %-10s %-10s\n",
                 "Name", "HP", "level","mana","str","agi","dex","money","exp");
         String Warriors_out = "Here are warriors:\n" + title;
         String Sorcerers_out = "Here are sorcerers:\n"+ title;
@@ -193,14 +193,22 @@ public class TerminalPrinter {
         System.out.println(String.format("%s successfully spent %s dollar on %s", hero.getName(), item.getprice(),item.getname()));
     }
 
-    public static void each_hero_round_begin(Hero h, Map game_map, Player player) {
+    public static void each_hero_round_begin(Hero h, int i, Map game_map, Player player) {
         //game_map.print_random_map(player);
-        System.out.println("HERO " + h.getName()+ " MAKE YOUR MOVE");
-
+        System.out.println("H" + (i+1) +" "+ h.getName()+ " MAKE YOUR MOVE");
 
     }
 
     public static void Invalid_move() {
         System.out.println("Invalid Move, Try again");
     }
+
+    public static void cant_attack() { System.out.println("There is no monster in attacking range!!!");}
+
+    public static void not_potion() { System.out.println("This is not Potion!!!");}
+    public static void not_spell() { System.out.println("This is not Spell!!!");}
+
+    public static void print_recall() { System.out.println("successfully recall !!");}
+
+    public static void cant_enter_market() { System.out.println("You can only enter market when the hero is in Nexus");}
 }

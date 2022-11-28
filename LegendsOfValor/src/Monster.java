@@ -12,8 +12,8 @@ public class Monster implements Character{
     private final double spell_affect_factor;
     private final int level_HP_ratio;
 
-    int monster_pos_x;
-    int monster_pos_y;
+    private int monster_pos_x;
+    private int monster_pos_y;
 
 
     Monster(String name, int level, int damage, int defense, int dodge_abi){

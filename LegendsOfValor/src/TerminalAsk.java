@@ -18,8 +18,12 @@ public class TerminalAsk {
                 continue;
             }
             int index = Integer.parseInt(num);
-            if(index < list.size() && index > 0){
+            if(index < list.size() && index >= 0){
                 return list.get(index);
+            }
+            else {
+                System.out.println("input is out of range !!");
+                continue;
             }
         }
     }
@@ -121,75 +125,81 @@ public class TerminalAsk {
         }
     }
 
-    public static String ask_which_turn(Party heroParty) {
+    public static String ask_which_turn(Player player) {
         while(true){
             System.out.println("Play your turn ?");
             System.out.print("[W] up [A] left [S] down [D] right,\n[K] Attack [N] Potion [L] Spell [E] Equip\n" +
-                    "[T] Teleport [R] Recall\n or type: [I]info [Q] quit\nPlease enter:");
+                    "[T] Teleport [R] Recall [M] Enter Market\n or type: [I]hero info [MI] monster info [Q] quit\nPlease enter:");
             String move = s.ScanString();
             if(move.equals("W") || move.equals("A") || move.equals("S") || move.equals("D") || move.equals("Q") ||
-                    move.equals("K") || move.equals("N") || move.equals("L") || move.equals("E") || move.equals("T") || move.equals("R")){
+                    move.equals("K") || move.equals("N") || move.equals("L") || move.equals("E") || move.equals("T") || move.equals("R")|| move.equals("M")){
                 return move;
             }
-            else if(move.equals("I")) System.out.print(heroParty); // if the input is I print information
+            else if(move.equals("I")) System.out.print(player.getHeroParty()); // if the input is I print information
+            else if(move.equals("MI")) System.out.print(player.getMonsterParty());
             else System.out.println("Please enter a valid move for this turn !");
         }
     }
 
-    public static Boolean teleport_hero(Map game_map, Hero hero, Player player){
+    public static Boolean teleport_hero(Map game_map, Hero hero, Player player){ // this method is for teleporting
+        // return true if we can teleport, otherwise return false
         while(true){
             int teleport_x;
             int teleport_y;
-            int cur_y_pos;
-            int max_x_pos = 0;
+            int cur_x_pos;
+            int min_y_pos = 0;
             int teleport_col;
             Boolean same_column = false;
 
             String type;
             System.out.println("Where Do you wanna teleport to ?");
             try{
-                teleport_x  = sc.nextInt() - 1;
-                teleport_y  = sc.nextInt() - 1;
-                cur_y_pos = hero.getChar_pos_y();
+                System.out.print("Please enter col :");
+                teleport_x  = sc.nextInt(); //modify the row/col
+                sc.nextLine();
+                System.out.print("Please enter row :");
+                teleport_y  = sc.nextInt();
+                sc.nextLine();
+                cur_x_pos = hero.getChar_pos_x();
 
 
-                type = game_map.getWorldCell(teleport_y , teleport_x).toString();
+                type = game_map.getWorldCell(teleport_x , teleport_y).toString();
                 Cell cur_cell = game_map.getWorldCell(hero.getChar_pos_x(),hero.getChar_pos_y());
                 Cell cell_to_teleport = game_map.getWorldCell(teleport_x , teleport_y);
                 Cell monster_check_cell = game_map.getWorldCell(teleport_x - 1 , teleport_y);
 
                 //To check if the hero is teleporting to the same column
-                if(Arrays.asList(Components.hero_col_1).contains(cur_y_pos)){
-                    if(Arrays.asList(Components.hero_col_1).contains(teleport_y)){
+                if(CharInLen(Components.hero_col_1, cur_x_pos)){
+                    if(CharInLen(Components.hero_col_1, teleport_x)){
                         same_column = true;
                     }
                 }
-                else if(Arrays.asList(Components.hero_col_2).contains(cur_y_pos)){
-                    if(Arrays.asList(Components.hero_col_2).contains(teleport_y)){
+                else if(CharInLen(Components.hero_col_2, cur_x_pos)){
+                    if(CharInLen(Components.hero_col_2, teleport_x)){
                         same_column = true;
                     }
                 }
-                else if(Arrays.asList(Components.hero_col_3).contains(cur_y_pos)){
-                    if(Arrays.asList(Components.hero_col_3).contains(teleport_y)){
+                else if(CharInLen(Components.hero_col_3, cur_x_pos)){
+                    if(CharInLen(Components.hero_col_3, teleport_x)){
                         same_column = true;
                     }
                 }
 
                 //To check if the hero is trying to teleport forward the existing hero
-                if(Arrays.asList(Components.hero_col_1).contains(teleport_y)){
-                    max_x_pos = return_hero_row(player , 1);
+                if(CharInLen(Components.hero_col_1, teleport_x)){
+                    min_y_pos = return_hero_row(player , 1);
                 }
-                else if(Arrays.asList(Components.hero_col_2).contains(teleport_y)){
-                    max_x_pos = return_hero_row(player , 2);
+                else if(CharInLen(Components.hero_col_2, teleport_x)){
+                    min_y_pos = return_hero_row(player , 2);
                 }
-                else if(Arrays.asList(Components.hero_col_3).contains(teleport_y)){
-                    max_x_pos = return_hero_row(player , 3);
-                }
-                
+                else if(CharInLen(Components.hero_col_3, teleport_x)){
 
-
-                if(type.equals(Components.Inaccessible) || cell_to_teleport.getHero_present() || same_column|| teleport_x < max_x_pos||monster_check_cell.getMonster_present()  ){
+                    min_y_pos = return_hero_row(player , 3);
+                }
+                // check we can teleport or not
+                if(type.equals(Components.Inaccessible) || cell_to_teleport.getHero_present() || same_column|| teleport_y < min_y_pos||monster_check_cell.getMonster_present()){
                     TerminalPrinter.cannot_move();
+                    return false;
                 }
                 else{
                     cur_cell.setHero_present(false) ;
@@ -198,52 +208,122 @@ public class TerminalAsk {
                     hero.setChar_pos_y(teleport_y);
                     return true;
                 }
-
             }
             catch(Exception e){
                 TerminalPrinter.cannot_move();
-
+                return false;
             }
-
-
         }
 
     }
 
-    private static int return_hero_row(Player player, int col) {
-        int x = 0;
+    private static int return_hero_row(Player player, int len) {  // this class is for returning the heroes max position in each len
+        int min_y = 7;
         Hero hero;
-        if(col == 1){
-            for(int i =0 ; i < player.getHeroParty().size() ; i++ ){
+        if(len == 1){
+            for(int i =0 ; i < player.getHeroParty().size() ; i++ ){ // return the position if there is hero in len 1
                 hero = (Hero) player.getHeroParty().getCharacter(i);
-                if(Arrays.asList(Components.hero_col_1).contains(hero.getChar_pos_y())){
-                    return hero.getChar_pos_x();
+                if(CharInLen(Components.hero_col_1, hero.getChar_pos_x())){
+                    min_y = Math.min(min_y, hero.getChar_pos_y());
                 }
-
             }
-
         }
-        else if(col == 2){
-            for(int i =0 ; i < player.getHeroParty().size() ; i++ ){
+        else if(len == 2){
+            for(int i =0 ; i < player.getHeroParty().size() ; i++ ){// return the position if there is hero in len 2
                 hero = (Hero) player.getHeroParty().getCharacter(i);
-                if(Arrays.asList(Components.hero_col_2).contains(hero.getChar_pos_y())){
-                    return hero.getChar_pos_x();
+                if(CharInLen(Components.hero_col_2, hero.getChar_pos_x())){
+                    min_y = Math.min(min_y, hero.getChar_pos_y());
                 }
-
             }
-
         }
-        else if(col == 3){
-            for(int i =0 ; i < player.getHeroParty().size() ; i++ ){
+        else if(len == 3){
+            for(int i = 0 ; i < player.getHeroParty().size() ; i++ ){// return the position if there is hero in len 3
                 hero = (Hero) player.getHeroParty().getCharacter(i);
-                if(Arrays.asList(Components.hero_col_3).contains(hero.getChar_pos_y())){
-                    return hero.getChar_pos_x();
+                if(CharInLen(Components.hero_col_3, hero.getChar_pos_x())){
+                    min_y = Math.min(min_y, hero.getChar_pos_y());
                 }
-
             }
-
         }
-        return x;
+        return min_y;
+    }
+
+    private static boolean CharInLen(int[] hero_col, int col){
+        for (int element : hero_col) {
+            if (element == col) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static String ask_which_potion_spell(Hero hero, List<Items> Cosumables){ //ask which potion or spell the player wants to use in a battle
+        if(Cosumables.isEmpty()){ // when the list is empty
+            System.out.println("There is no Spell/Potion that can be used!!!");
+            return "L";
+        }
+        System.out.println(String.format("\nHere are %s have: ",hero.getName()));
+        TerminalPrinter.Print_items(Cosumables);
+        while(true){
+            System.out.println(String.format("Which Spell/Potion should %s use?",hero.getName()));
+            System.out.println("[I] info [L] leave [Q] quit");
+            System.out.print("Please Enter the number: ");
+            String index = s.ScanString();
+            if(index.equals("I") ) { // quit
+                TerminalPrinter.Print_items(Cosumables);
+                continue;
+            }
+            else if (index.equals("Q")||index.equals("L") ) { // quit the game
+                return index;
+            }
+            else{
+                try {
+                    Integer.parseInt(index);
+                }catch(Exception e) {
+                    System.out.println("invalid input! please input a integer\n");
+                    continue;
+                }
+            }
+            int index_int = Integer.parseInt(index);
+            if(0 <= index_int && index_int < Cosumables.size()){
+                return index;
+            }
+            System.out.println("Please select a item again");
+        }
+    }
+
+    static String ask_equip(Hero hero, List<Items> equiptments){ //ask player which equipment should the hero equip?
+        if(equiptments.isEmpty()){ // when the list is empty
+            System.out.println("There is no items that can be equiped!!!");
+            return "L";
+        }
+        System.out.println(String.format("\n Here are equipments %s have: ",hero.getName()));
+        TerminalPrinter.Print_items(equiptments);
+        while(true){
+            System.out.println(String.format("Which equipment should %s equip?",hero.getName()));
+            System.out.println("[I] info [L] leave [Q] quit");
+            System.out.print("Please Enter the number: ");
+            String index = s.ScanString();
+            if(index.equals("I") ) { // quit
+                TerminalPrinter.Print_items(equiptments);
+                continue;
+            }
+            else if (index.equals("Q")||index.equals("L") ) { // quit the game
+                return index;
+            }
+            else{
+                try {
+                    Integer.parseInt(index);
+                }catch(Exception e) {
+                    System.out.println("invalid input! please input a integer\n");
+                    continue;
+                }
+            }
+            int index_int = Integer.parseInt(index);
+            if(0 <= index_int && index_int < equiptments.size()){
+                return index;
+            }
+            System.out.println("Please select a item again");
+        }
     }
 
 

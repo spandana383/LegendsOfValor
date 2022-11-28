@@ -1,5 +1,7 @@
 Name/cost/level/damage/required hands
-Sword           500     1    800    1
+Sword1           500     1    800    1
+Sword2           500     1    800    1
+Sword3           500     1    800    1
 Bow             300     2    500    2
 Scythe          1000    6    1100   2
 Axe             550     5    850    1

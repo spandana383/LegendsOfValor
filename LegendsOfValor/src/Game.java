@@ -1,6 +1,6 @@
 import java.io.FileNotFoundException;
 
-public interface Round_based_game {
+public interface Game {
     abstract void startARound();
     abstract void endARound();
     abstract void startGame() throws FileNotFoundException;

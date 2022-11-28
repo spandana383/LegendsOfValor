@@ -13,11 +13,11 @@ public class Components {
 
     public static int max_heroes = 3;
 
-    public static int[] intial_hero_x = new int[]{ 7 , 7 , 7 };
-    public static int[] intial_hero_y = new int[]{ 0 , 3 , 6 };
+    public static int[] intial_hero_y = new int[]{ 7 , 7 , 7 };
+    public static int[] intial_hero_x = new int[]{ 0 , 3 , 6 };
 
-    public static int[] intial_monster_x = new int[]{ 0 , 0 , 0 };
-    public static int[] intial_monster_y = new int[]{ 1 , 4 , 7 };
+    public static int[] intial_monster_y = new int[]{ 0 , 0 , 0 };
+    public static int[] intial_monster_x = new int[]{ 1 , 4 , 7 };
 
     public static String hero_symbol = "H";
     public static String monster_symbol = "M";
@@ -43,13 +43,15 @@ public class Components {
     public static String teleport = "T";
     public static String recall = "R";
     public static String Inaccessible = "I";
+    public static String enterMarket = "M";
 
     public static String[] direction = {"W", "S", "A", "D"};
 
     public static int[] hero_col_1 = {0,1};
-
     public static int[] hero_col_2 = {3,4};
     public static int[] hero_col_3 = {6,7};
+
+
 
 
 

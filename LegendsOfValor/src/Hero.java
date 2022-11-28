@@ -253,21 +253,29 @@ abstract public class Hero implements Character{  // this class is Hero object
         }
     }
     public void gainMana(int extra_mana){
-        System.out.println(this.name+" HP increase "+extra_mana);
+        System.out.println(this.name+" mana increase "+extra_mana);
         mana += extra_mana;
     }
     public void gainStrenght(int extra_str){
-        System.out.println(this.name+" HP increase "+extra_str);
+        System.out.println(this.name+" Str increase "+extra_str);
         str += extra_str;
     }
     public void gainDex(int extra_dex){
-        System.out.println(this.name+" HP increase "+extra_dex);
+        System.out.println(this.name+" dex increase "+extra_dex);
         dex += extra_dex;
     }
     public void gainAgi(int extra_agi){
-        System.out.println(this.name+" HP increase "+extra_agi);
+        System.out.println(this.name+" agi increase "+extra_agi);
         agi += extra_agi;
     }
+
+    public void gainMoneyExp(int money, int exp){ // gain money and exp
+        System.out.println(">> Let's collect some Gold and gain some Exp <<");
+        gainGold(money);
+        gainExp(exp);
+        TerminalPrinter.gain_exp_money_print(this ,money,exp);
+    }
+
 
     public void HPregain(){
         HP = (int) Math.round(HP* HP_regain_factor);

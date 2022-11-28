@@ -4,6 +4,9 @@ import java.util.List;
 public class Party {
     private List<Character> party = new ArrayList<Character>();
 
+    public List<Character> getpartyList(){
+        return party;
+    }
     public boolean checkMember(Character c){ // check c is in party or not
         if(party.isEmpty()){
             return false;
@@ -17,6 +20,12 @@ public class Party {
     }
     public void addMember(Character h){
         party.add(h);
+    }
+
+    public void addAll(Party new_party){
+        for(int i = 0; i<new_party.size(); i++){
+            this.party.add(new_party.getCharacter(i));
+        }
     }
     public Character getMembers(int index){ //return hero by the index
         return party.get(index);
